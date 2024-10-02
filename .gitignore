@@ -1,0 +1,8 @@
+# Ignore .env file, IMMEDIATELY
+*.env
+
+# Ignore compiled class files
+*.class
+
+# Ignore jar files as well
+*.jar

@@ -1,0 +1,19 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "java",
+            "name": "DeadlineNotifier",
+            "request": "launch",
+            "mainClass": "eclass.kr.DeadlineNotifier",
+            "projectName": "deadline-notifier"
+        },
+        {
+            "type": "java",
+            "name": "Launch Java App",
+            "request": "launch",
+            "mainClass": "eclass.kr.DeadlineNotifier",
+            "envFile": "${workspaceFolder}/.env"
+        }
+    ]
+  }
