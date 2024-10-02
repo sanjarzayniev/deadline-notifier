@@ -121,8 +121,8 @@ public class DeadlineNotifier {
                                 "--remote-allow-origins=*",
                                 "--no-sandbox",
                                 "--disable-dev-shm-usage",
-                                // "--headless",
-                                // "--remote-debugging-port=9222"
+                                "--headless",
+                                "--remote-debugging-port=9222"
                 };
                 options.addArguments(arguments);
                 driver = new ChromeDriver(options);
