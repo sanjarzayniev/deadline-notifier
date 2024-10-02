@@ -57,9 +57,9 @@ public class DeadlineNotifier {
                         String timeOfDeadline = "Initial Value";
 
                         List<WebElement> fieldsOfDeadline;
-                        int count = 1;
-
                         JavascriptExecutor js = (JavascriptExecutor) driver;
+                        int count = 1; // index for for-each loop
+
                         for (WebElement event : driver.findElements(By.className("card"))) {
                                 typeOfEvent = event.findElement(By.tagName("img")).getAttribute("title");
                                 nameOfEvent = event.findElement(By.tagName("h3")).findElement(By.tagName("a"))
@@ -91,8 +91,6 @@ public class DeadlineNotifier {
                                         typeOfEvent = "Video";
                                 }
 
-                                
-
                                 System.out.println("\n" + count + ". Course Name: " + nameOfCourse);
                                 System.out.println("   Event Name: " + nameOfEvent);
                                 System.out.println("   Type: " + typeOfEvent);
@@ -106,10 +104,26 @@ public class DeadlineNotifier {
 
                 } else {
                         System.out.println(NO_DEADLINE_MESSAGE);
+                        try {
+                                Thread.sleep(4500);
+                        } catch (InterruptedException e) {
+                                e.printStackTrace();
+                        } // stop the browser loading so that IllegalThreadStateException does not happen!
                 }
 
-                // System.out.println("The day of month is " + day.toString());
-                // System.out.println("The day of week is " + LocalDate.now().getDayOfWeek());
+                // Runnable runnable = new Runnable() {
+                // @Override
+                // public void run() {
+                // System.out.println("Runnable initialized");
+                // }
+                // };
+
+                // Thread urlCheckerThread = new Thread(runnable);
+                // urlCheckerThread.setDaemon(true);
+                // urlCheckerThread.start();
+
+                System.out.println("The day of month is " + day.toString());
+                System.out.println("The day of week is " + LocalDate.now().getDayOfWeek());
 
                 tearDown();
         }

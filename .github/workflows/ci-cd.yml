@@ -11,6 +11,7 @@ on:
 jobs:
   run-selenium-script:
     runs-on: ubuntu-latest
+    if: always()
 
     steps:
     # Step 1: Checkout the repository
@@ -44,8 +45,8 @@ jobs:
     # Step 6: Run Selenium script using Maven and Send Telegram notification
     - name: Run Selenium script
       run: |
-        mvn exec:java -Dexec.mainClass="kr.eclass.DeadlineNotifier" > OUTPUT.txt
-        curl -s -X POST https://api.telegram.org/bot${{ secrets.TELEGRAM_BOT_TOKEN }}/sendMessage -d chat_id=${{ secrets.TELEGRAM_CHAT_ID }} -d text="$(cat OUTPUT.txt)"
+        mvn exec:java -Dexec.mainClass="eclass.kr.DeadlineNotifier" > OUTPUT.txt
+        curl -s -X POST https://api.telegram.org/bot${{ secrets.TELEGRAM_BOT_TOKEN }}/sendMessage -d chat_id=${{ secrets.TELEGRAM_CHAT_ID }} -d text="$(grep '^We' OUTPUT.txt)"
       env:
         ID: ${{ secrets.ID }}
         PASSWORD: ${{ secrets.PASSWORD }}
