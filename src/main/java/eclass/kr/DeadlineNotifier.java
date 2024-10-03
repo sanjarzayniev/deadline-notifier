@@ -11,6 +11,7 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.time.Duration;
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.List;
 
 import io.github.bonigarcia.wdm.WebDriverManager;
@@ -19,7 +20,7 @@ public class DeadlineNotifier {
         public static WebDriver driver;
         public static final String URL = "https://eclass.inha.ac.kr/login.php";
         public static final String DEADLINE_MESSAGE = "We do have some tasks to do. Here is the list of them:";
-        public static final String NO_DEADLINE_MESSAGE = "We have no deadline for today. So enjoy!";
+        public static final String NO_DEADLINE_MESSAGE = "We have no deadline for today ";
         public static final String INVITE_MESSAGE = "You can also visit this page to see the upcoming events by yourself: ";
         public static final String NOT_FOUND_DEADLINE_MESSAGE = "Could not fetch the deadline!";
 
@@ -103,24 +104,13 @@ public class DeadlineNotifier {
                         System.out.println("\n" + INVITE_MESSAGE + linkOfTheEvent);
 
                 } else {
-                        System.out.println(NO_DEADLINE_MESSAGE);
+                        System.out.println(NO_DEADLINE_MESSAGE + "(" + LocalTime.now() + "). So enjoy!");
                         try {
                                 Thread.sleep(4500);
                         } catch (InterruptedException e) {
                                 e.printStackTrace();
                         } // stop the browser loading so that IllegalThreadStateException does not happen!
                 }
-
-                // Runnable runnable = new Runnable() {
-                // @Override
-                // public void run() {
-                // System.out.println("Runnable initialized");
-                // }
-                // };
-
-                // Thread urlCheckerThread = new Thread(runnable);
-                // urlCheckerThread.setDaemon(true);
-                // urlCheckerThread.start();
 
                 System.out.println("The day of month is " + day.toString());
                 System.out.println("The day of week is " + LocalDate.now().getDayOfWeek());
