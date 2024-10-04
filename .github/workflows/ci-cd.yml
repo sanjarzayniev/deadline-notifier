@@ -46,7 +46,7 @@ jobs:
       - name: Run Selenium script & Notify via Telegram
         run: |
           mvn exec:java -Dexec.mainClass="eclass.kr.DeadlineNotifier" > OUTPUT.txt
-          curl -s -X POST https://api.telegram.org/bot${{ secrets.TELEGRAM_BOT_TOKEN }}/sendMessage -d chat_id=${{ secrets.TELEGRAM_CHAT_ID }} -d text="$(sed -n '/We/,/^\[Warning]/p' OUTPUT.txt)"
+          curl -s -X POST https://api.telegram.org/bot${{ secrets.TELEGRAM_BOT_TOKEN }}/sendMessage -d chat_id=${{ secrets.TELEGRAM_CHAT_ID }} -d text="$(sed -n '/Today/,/^\End/p' OUTPUT.txt)"
         env:
           ID: ${{ secrets.ID }}
           PASSWORD: ${{ secrets.PASSWORD }}

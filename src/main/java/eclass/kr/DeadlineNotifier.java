@@ -41,6 +41,7 @@ public class DeadlineNotifier {
                 WebElement date = driver.findElement(By.xpath("//*[text()='" + day.toString() + "']"));
                 String linkOfTheEvent = date.getAttribute("href");
 
+                System.out.println("Today is " + LocalDate.now());
                 if (date.getTagName().equals("a")) {
                         System.out.println(DEADLINE_MESSAGE);
 
@@ -99,23 +100,24 @@ public class DeadlineNotifier {
 
                                 count++;
 
-                                js.executeScript("window.scrollBy(0, 650)");
+                                js.executeScript("window.scrollBy(0, 550)");
                         }
                         System.out.println("\n" + INVITE_MESSAGE + linkOfTheEvent);
-
                 } else {
                         System.out.println(NO_DEADLINE_MESSAGE + "(" + LocalTime.now() + "). So enjoy!");
                         try {
-                                Thread.sleep(4500);
+                                Thread.sleep(8000);
                         } catch (InterruptedException e) {
                                 e.printStackTrace();
                         } // stop the browser loading so that IllegalThreadStateException does not happen!
+
+                        System.out.println("The day of month is " + day.toString());
+                        System.out.println("The day of week is " + LocalDate.now().getDayOfWeek());
+
+                        System.out.println("End...");
+                        tearDown();
                 }
 
-                System.out.println("The day of month is " + day.toString());
-                System.out.println("The day of week is " + LocalDate.now().getDayOfWeek());
-
-                tearDown();
         }
 
         public static void setup() {
