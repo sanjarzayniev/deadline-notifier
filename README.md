@@ -23,9 +23,7 @@ It is nothing but a simple application written in `java` that scrapes data with 
 
 ## Setup and Installation
 
-```
 Actually, you don't need to install & run it locally. You just need to fork this repo on GitHub and add 4 repository secrets by yourself to get the benefit of this project. And it will itself notify you about your deadlines for today!
-```
 
 These are the very 4 secret repository secrets:
 ![Repo Secrets](./images/secrets.png)
@@ -38,14 +36,19 @@ These are the very 4 secret repository secrets:
 However, you feel like to contribute or add some features on it. You need to follow these steps to set up the environment:
 
 1. **Clone the repository**:
+
    ```bash
    git clone https://github.com/sanjarzayniev/deadline-notifier.git
 
+   ```
+
 2. **Ensure you have the following installed**:
+
    - **Java Development Kit (JDK) 8 or higher (in my case it is 11)**: Required to compile and run the Java code. [Download jdk here](https://www.oracle.com/java/technologies/javase-downloads.html).
    - **Maven**: Build tool used to manage project dependencies and to run the application. [Install Maven here](https://maven.apache.org/install.html).
 
 3. **Set up environment variables for login credentials**:
+
    - Create two environment variables, `ID` and `PASSWORD`, that will be used for authentication for local runs:
      - On **Windows**:
        ```bash
@@ -57,9 +60,10 @@ However, you feel like to contribute or add some features on it. You need to fol
        export ID="your-username"
        export PASSWORD="your-password"
        ```
-    - Or you can just save them in your .env file, like I do in my local runs.
+   - Or you can just save them in your .env file, like I do in my local runs.
 
-3. **Install project dependencies (Maven)**:
+4. **Install project dependencies (Maven)**:
+
    - Navigate to the project directory:
      ```bash
      cd /<your-projects-folder-name>/deadline-notifier
@@ -69,11 +73,14 @@ However, you feel like to contribute or add some features on it. You need to fol
      mvn clean install
      ```
 
-4. **WebDriver Setup**:
+5. **WebDriver Setup**:
+
    - The project uses **WebDriverManager** for automatic driver management. It automatically downloads the appropriate browser driver (e.g., ChromeDriver in my case) for the version of the browser you are using. So you don't need to worry about downloading the drivers and selenium server manually.
 
-5. **Configure Chrome Options**:
+6. **Configure Chrome Options**:
+
    - When running locally, do not forget to put some chrome options into a comment like this:
+
    ```java
    public static void setup() {
                 WebDriverManager.chromedriver().setup();
@@ -89,28 +96,30 @@ However, you feel like to contribute or add some features on it. You need to fol
                 driver = new ChromeDriver(options);
         }
    ```
+
    As it will allow you to see it visually running the browser, going to the eclass website, so on... By default, all of these 5 options are added since it requires the headless mode and remote debugging port when running in cloud.
 
-6. **Run the project**:
+7. **Run the project**:
+
    - To run the project, simply execute the main class:
      ```bash
      mvn exec:java -Dexec.mainClass="eclass.kr.DeadlineNotifier"
      ```
    - If it does not work, in the worst case, you can manually show your ID and PASSWORD variables like:
-      ```bash
+
+     ```bash
      ID=<your-id> PASSWORD=<your-password> mvn exec:java -Dexec.mainClass="eclass.kr.DeadlineNotifier"
      ```
 
    - **Verify the output**:
      - After running the program, the output will be displayed in the console, showing whether there are upcoming events, deadlines, and other related information.
 
-
 ## Project Structure
 
 - `src/main/java/eclass/kr`: Contains the main application code.
   - **`DeadlineNotifier.java`**: The primary class that performs the web scraping and automation tasks.
-  
 - Key methods in `DeadlineNotifier.java`:
+
   - `setup()`: Initializes the WebDriver and sets Chrome options.
   - `login()`: Logs into the e-class website using credentials stored in repository secrets.
   - `action()`: Retrieves and processes deadlines and event data from the page & does the whole action (mess).

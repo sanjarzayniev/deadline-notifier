@@ -3,8 +3,7 @@
 *.class
 *.jar
 
-# Generated
-target/*
+target/
 *.lst
 pom.xml.tag
 pom.xml.releaseBackup
