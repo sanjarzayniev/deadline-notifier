@@ -22,6 +22,8 @@ public class DeadlineNotifier {
         public static final String NO_DEADLINE_MESSAGE = "We have no deadline for today. So enjoy!";
         public static final String INVITE_MESSAGE = "You can also visit this page to see the upcoming events by yourself: ";
         public static final String NOT_FOUND_DEADLINE_MESSAGE = "Could not fetch the deadline!";
+        public static final String VOD = "VOD";
+        public static final int MIN_LENGTH_THAT_DEADLINE_CAN_BE = 5;
 
         public static void main(String[] args) {
                 setup();
@@ -107,9 +109,7 @@ public class DeadlineNotifier {
                                                 .findElement(By.tagName("a")).getText();
                                 fieldsOfDeadline = event.findElement(By.tagName("span")).findElements(By.tagName("a"));
 
-                                if (fieldsOfDeadline.size() == 2) {
-                                        timeOfDeadline = event.findElement(By.tagName("span")).getText();
-                                } else if (fieldsOfDeadline.size() == 1) {
+                                if (fieldsOfDeadline.size() == 2 || fieldsOfDeadline.size() == 1) {
                                         timeOfDeadline = event.findElement(By.tagName("span")).getText();
                                 } else if (fieldsOfDeadline.size() == 0) {
                                         timeOfDeadline = "Today at " + event.findElement(By.tagName("div"))
@@ -119,18 +119,27 @@ public class DeadlineNotifier {
                                         timeOfDeadline = NOT_FOUND_DEADLINE_MESSAGE;
                                 }
 
-                                if (typeOfEvent.equals("VOD")) {
+                                if (timeOfDeadline.contains("»")) {
+                                        String[] deadlineParts = timeOfDeadline.split("»");
+                                        timeOfDeadline = deadlineParts[1].trim();
+                                }
+
+                                if (timeOfDeadline.length() == MIN_LENGTH_THAT_DEADLINE_CAN_BE) {
+                                        timeOfDeadline = "Today at " + timeOfDeadline;
+                                }
+
+                                if (typeOfEvent.equals(VOD)) {
                                         typeOfEvent = "Video";
                                 }
 
                                 System.out.println("\n" + count + ". Course Name: " + nameOfCourse);
                                 System.out.println("   Event Name: " + nameOfEvent);
                                 System.out.println("   Type: " + typeOfEvent);
-                                System.out.println("   Deadline (from >> to): " + timeOfDeadline);
+                                System.out.println("   Deadline: " + timeOfDeadline);
 
                                 count++;
 
-                                js.executeScript("window.scrollBy(0, 550)");
+                                js.executeScript("window.scrollBy(0, 550)"); // scroll down by 550 pixels vertically
                         }
                         System.out.println("\n" + INVITE_MESSAGE + linkOfTheEvent);
                 } else {
