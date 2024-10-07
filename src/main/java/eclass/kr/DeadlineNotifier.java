@@ -65,7 +65,7 @@ public class DeadlineNotifier {
                 logInButton.click();
         }
 
-        public static void action() {
+        public static void action() { // welcome to the mess
                 WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
                 wait.until(ExpectedConditions
                                 .presenceOfAllElementsLocatedBy(By.cssSelector(".btn.btn-xs.btn-default.btn-more")));
@@ -85,11 +85,7 @@ public class DeadlineNotifier {
 
                         date.click();
 
-                        try {
-                                Thread.sleep(5000);
-                        } catch (InterruptedException e) {
-                                e.printStackTrace();
-                        }
+                        sleep(5);
 
                         String typeOfEvent;
                         String nameOfEvent;
@@ -128,6 +124,10 @@ public class DeadlineNotifier {
                                         timeOfDeadline = "Today at " + timeOfDeadline;
                                 }
 
+                                if (timeOfDeadline.startsWith("Today")) {
+                                        timeOfDeadline = timeOfDeadline + "🔴";
+                                }
+
                                 if (typeOfEvent.equals(VOD)) {
                                         typeOfEvent = "Video";
                                 }
@@ -144,12 +144,15 @@ public class DeadlineNotifier {
                         System.out.println("\n" + INVITE_MESSAGE + linkOfTheEvent);
                 } else {
                         System.out.println("\n" + NO_DEADLINE_MESSAGE);
-                        try {
-                                Thread.sleep(5000);
-                        } catch (InterruptedException e) {
-                                e.printStackTrace();
-                        } // stop the browser loading so that IllegalThreadStateException does not happen!
+                        sleep(5); // stop the browser loading so that IllegalThreadStateException does not happen!
+                }
+        }
 
+        public static void sleep(int seconds) {
+                try {
+                        Thread.sleep(seconds * 1000);
+                } catch (InterruptedException e) {
+                        e.printStackTrace();
                 }
         }
 

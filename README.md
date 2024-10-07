@@ -123,6 +123,7 @@ However, you feel like to contribute or add some features on it. You need to fol
   - `setup()`: Initializes the WebDriver and sets Chrome options.
   - `login()`: Logs into the e-class website using credentials stored in repository secrets.
   - `action()`: Retrieves and processes deadlines and event data from the page & does the whole action (mess).
+  - `sleep(int seconds)`: Customized (Overriden) version of Thread.sleep(long milliseconds) method.
   - `tearDown()`: Closes the WebDriver and cleans up resources.
 
 - `.github/workflows/ci-cd.yml`:
