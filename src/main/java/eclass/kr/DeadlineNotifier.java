@@ -11,18 +11,19 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.time.Duration;
 import java.time.LocalDate;
-import java.util.List;
 
 import io.github.bonigarcia.wdm.WebDriverManager;
 
 public class DeadlineNotifier {
         public static WebDriver driver;
         public static final String URL = "https://eclass.inha.ac.kr/login.php";
+        public static final String URL_FOR_TODAYS_EVENTS = "https://eclass.inha.ac.kr/calendar/view.php?view=day";
         public static final String DEADLINE_MESSAGE = "We do have some tasks to do. Here is the list of them:";
-        public static final String NO_DEADLINE_MESSAGE = "We have no deadline for today. So enjoy!";
+        public static final String NO_DEADLINE_MESSAGE = "We have no deadline for today. So enjoy and chill!";
         public static final String INVITE_MESSAGE = "You can also visit this page to see the upcoming events by yourself: ";
         public static final String NOT_FOUND_DEADLINE_MESSAGE = "Could not fetch the deadline!";
         public static final String VOD = "VOD";
+        public static final String NO_EVENT_MESSAGE = "There are no events this day.";
         public static final int MIN_LENGTH_THAT_DEADLINE_CAN_BE = 5;
 
         public static void main(String[] args) {
@@ -70,20 +71,14 @@ public class DeadlineNotifier {
                 wait.until(ExpectedConditions
                                 .presenceOfAllElementsLocatedBy(By.cssSelector(".btn.btn-xs.btn-default.btn-more")));
 
-                WebElement moreUpcomingEventsButton = driver
-                                .findElement(By.cssSelector(".btn.btn-xs.btn-default.btn-more"));
-                moreUpcomingEventsButton.click();
+                driver.get(URL_FOR_TODAYS_EVENTS);
 
-                Integer day = LocalDate.now().getDayOfMonth();
-                WebElement date = driver.findElement(By.xpath("//*[text()='" + day.toString() + "']"));
-                String linkOfTheEvent = date.getAttribute("href");
+                sleep(3);
 
-                System.out.println("Today is " + LocalDate.now().getMonth() + " " + LocalDate.now().getDayOfMonth()
-                                + ", " + LocalDate.now().getYear());
-                if (date.getTagName().equals("a")) {
+                printDate(); // today's date, of course
+
+                if (!driver.getPageSource().contains(NO_EVENT_MESSAGE)) {
                         System.out.println("\n" + DEADLINE_MESSAGE);
-
-                        date.click();
 
                         sleep(5);
 
@@ -92,7 +87,6 @@ public class DeadlineNotifier {
                         String nameOfCourse;
                         String timeOfDeadline = "Initial Value";
 
-                        List<WebElement> fieldsOfDeadline;
                         JavascriptExecutor js = (JavascriptExecutor) driver;
                         int count = 1; // index for for-each loop
 
@@ -103,48 +97,21 @@ public class DeadlineNotifier {
 
                                 nameOfCourse = event.findElement(By.tagName("div")).findElement(By.tagName("div"))
                                                 .findElement(By.tagName("a")).getText();
-                                fieldsOfDeadline = event.findElement(By.tagName("span")).findElements(By.tagName("a"));
 
-                                if (fieldsOfDeadline.size() == 2 || fieldsOfDeadline.size() == 1) {
-                                        timeOfDeadline = event.findElement(By.tagName("span")).getText();
-                                } else if (fieldsOfDeadline.size() == 0) {
-                                        timeOfDeadline = "Today at " + event.findElement(By.tagName("div"))
-                                                        .findElement(By.tagName("span"))
-                                                        .getText();
-                                } else {
-                                        timeOfDeadline = NOT_FOUND_DEADLINE_MESSAGE;
-                                }
-
-                                if (timeOfDeadline.contains("»")) {
-                                        String[] deadlineParts = timeOfDeadline.split("»");
-                                        timeOfDeadline = deadlineParts[1].trim();
-                                }
-
-                                if (timeOfDeadline.length() == MIN_LENGTH_THAT_DEADLINE_CAN_BE) {
-                                        timeOfDeadline = "Today at " + timeOfDeadline;
-                                }
-
-                                if (timeOfDeadline.startsWith("Today")) {
-                                        timeOfDeadline = timeOfDeadline + "🔴";
-                                }
+                                timeOfDeadline = parseDeadline(timeOfDeadline, event);
 
                                 if (typeOfEvent.equals(VOD)) {
                                         typeOfEvent = "Video";
                                 }
 
-                                System.out.println("\n" + count + ". Course Name: " + nameOfCourse);
-                                System.out.println("   Event Name: " + nameOfEvent);
-                                System.out.println("   Type: " + typeOfEvent);
-                                System.out.println("   Deadline: " + timeOfDeadline);
-
+                                printInfo(count, nameOfCourse, nameOfEvent, typeOfEvent, timeOfDeadline);
                                 count++;
-
                                 js.executeScript("window.scrollBy(0, 550)"); // scroll down by 550 pixels vertically
                         }
-                        System.out.println("\n" + INVITE_MESSAGE + linkOfTheEvent);
+                        System.out.println(
+                                        "\n" + INVITE_MESSAGE + URL_FOR_TODAYS_EVENTS);
                 } else {
                         System.out.println("\n" + NO_DEADLINE_MESSAGE);
-                        sleep(5); // stop the browser loading so that IllegalThreadStateException does not happen!
                 }
         }
 
@@ -154,6 +121,42 @@ public class DeadlineNotifier {
                 } catch (InterruptedException e) {
                         e.printStackTrace();
                 }
+        }
+
+        public static void printDate() {
+                System.out.println("Today is " + LocalDate.now().getMonth() + " " + LocalDate.now().getDayOfMonth()
+                                + ", " + LocalDate.now().getYear());
+        }
+
+        public static String parseDeadline(String timeOfDeadline, WebElement event) {
+
+                timeOfDeadline = event.findElement(By.tagName("span")).getText();
+
+                if (timeOfDeadline.contains("»")) {
+                        String[] deadlineParts = timeOfDeadline.split("»");
+                        timeOfDeadline = deadlineParts[1].trim(); // take the second part after »
+                }
+
+                if (timeOfDeadline.length() == MIN_LENGTH_THAT_DEADLINE_CAN_BE) {
+                        timeOfDeadline = "Today at " + timeOfDeadline;
+                }
+
+                if (timeOfDeadline.startsWith("Today")) {
+                        timeOfDeadline = timeOfDeadline + " ⚠️";
+                }
+
+                return timeOfDeadline;
+        }
+
+        public static void printInfo(int count,
+                        String nameOfCourse,
+                        String nameOfEvent,
+                        String typeOfEvent,
+                        String timeOfDeadline) {
+                System.out.println("\n" + count + ". Course Name: " + nameOfCourse);
+                System.out.println("   Event Name: " + nameOfEvent);
+                System.out.println("   Type: " + typeOfEvent);
+                System.out.println("   Deadline: " + timeOfDeadline);
         }
 
         public static void tearDown() {
