@@ -148,4 +148,4 @@ Or you can ask for feature requests you would like to see in this project as wel
 
 ## License
 
-This project is licensed under the MIT License. See the [LICENSE](./LICENCE) file for details.
+This project is licensed under the MIT License (Modified for Non-Commercial Use). See the [LICENSE](./LICENCE) file for details.
