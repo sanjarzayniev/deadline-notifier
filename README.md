@@ -23,7 +23,7 @@ It is nothing but a simple application written in `java` that scrapes data with 
 
 ## Setup and Installation
 
-Actually, you don't need to install & run it locally. You just need to fork this repo on GitHub and add 4 repository secrets by yourself to get the benefit of this project. And it will itself notify you about your deadlines for today!
+Actually, you don't need to install & run it locally. You just need to fork this repo on GitHub and add 4 repository secrets & create a telegram bot by yourself to get the benefit of this project. And it will itself notify you about your forthcoming deadlines for today(Assignment, Quiz, Video) and later (available only for videos)!
 
 These are the very 4 secret repository secrets:
 ![Repo Secrets](./images/secrets.png)
@@ -123,7 +123,10 @@ However, you feel like to contribute or add some features on it. You need to fol
   - `setup()`: Initializes the WebDriver and sets Chrome options.
   - `login()`: Logs into the e-class website using credentials stored in repository secrets.
   - `action()`: Retrieves and processes deadlines and event data from the page & does the whole action (mess).
-  - `sleep(int seconds)`: Customized (Overriden) version of Thread.sleep(long milliseconds) method.
+  - `sleep()`: Customized (Overriden) version of Thread.sleep(long milliseconds) method.
+  - `printDate()`: Prints today's date to console.
+  - `parseDeadline()`: Gets the deadline string and cuts & trims & makes it 'odambashara'.
+  - `printInfo()`: Prints the core message & events' list.
   - `tearDown()`: Closes the WebDriver and cleans up resources.
 
 - `.github/workflows/ci-cd.yml`:
