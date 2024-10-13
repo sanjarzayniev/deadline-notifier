@@ -1,9 +1,9 @@
 name: Run Selenium Java application built with Maven
 
 on:
-  # push: # commment for easy access
-  #   branches:
-  #     - master
+  push: # commment for easy access
+    branches:
+      - dev
   # pull_request:
   #   branches:
   #     - master
@@ -48,7 +48,7 @@ jobs:
       - name: Run Selenium script & Notify via Telegram
         run: |
           mvn exec:java -Dexec.mainClass="eclass.kr.DeadlineNotifier" > OUTPUT.txt
-          curl -s -X POST https://api.telegram.org/bot${{ secrets.TELEGRAM_BOT_TOKEN }}/sendMessage -d chat_id=${{ secrets.TELEGRAM_CHAT_ID }} -d text="$(sed -n '/Today/,/^Bye/{/^Bye/d;p}' OUTPUT.txt)"
+          curl -s -X POST https://api.telegram.org/bot${{ secrets.DEV_TELEGRAM_BOT_TOKEN }}/sendMessage -d chat_id=${{ secrets.DEV_TELEGRAM_CHAT_ID }} -d text="$(sed -n '/Today/,/^Bye/{/^Bye/d;p}' OUTPUT.txt)"
         env:
-          ID: ${{ secrets.ID }}
-          PASSWORD: ${{ secrets.PASSWORD }}
+          ID: ${{ secrets.DEV_ID }}
+          PASSWORD: ${{ secrets.DEV_PASSWORD }}
