@@ -57,10 +57,10 @@ public class DeadlineNotifier {
                 driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
 
                 WebElement username = driver.findElement(By.id("input-username"));
-                username.sendKeys(System.getenv("DEV_ID"));
+                username.sendKeys(System.getenv("ID"));
 
                 WebElement password = driver.findElement(By.id("input-password"));
-                password.sendKeys(System.getenv("DEV_PASSWORD"));
+                password.sendKeys(System.getenv("PASSWORD"));
 
                 WebElement logInButton = driver.findElement(By.cssSelector(".btn.btn-success"));
                 logInButton.click();
