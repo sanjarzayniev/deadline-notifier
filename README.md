@@ -99,7 +99,11 @@ However, you feel like to contribute or add some features on it. You need to fol
 
    As it will allow you to see it visually running the browser, going to the eclass website, so on... By default, all of these 5 options are added since it requires the headless mode and remote debugging port when running in cloud.
 
-7. **Run the project**:
+7. **Compile the project**:
+    ```bash
+    mvn compile
+    ```
+8. **Run the project**:
 
    - To run the project, simply execute the main class:
      ```bash
