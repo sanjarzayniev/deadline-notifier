@@ -106,7 +106,7 @@ public class DeadlineNotifier {
 
                                 printInfo(count, nameOfCourse, nameOfEvent, typeOfEvent, timeOfDeadline);
                                 count++;
-                                js.executeScript("window.scrollBy(0, 550)"); // scroll down by 550 pixels vertically
+                                js.executeScript("window.scrollBy(0, 600)"); // scroll down by 600 pixels vertically
                         }
                         System.out.println(
                                         "\n" + INVITE_MESSAGE + URL_FOR_TODAYS_EVENTS);
