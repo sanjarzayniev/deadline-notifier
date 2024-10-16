@@ -71,7 +71,9 @@ public class DeadlineNotifier {
                 wait.until(ExpectedConditions
                                 .presenceOfAllElementsLocatedBy(By.cssSelector(".btn.btn-xs.btn-default.btn-more")));
 
-                driver.get(URL_FOR_TODAYS_EVENTS);
+                // driver.get(URL_FOR_TODAYS_EVENTS);
+
+                driver.get("https://eclass.inha.ac.kr/calendar/view.php?view=day&course=1&time=1729018800");
 
                 sleep(3);
 
