@@ -8,7 +8,7 @@ on:
   #   branches:
   #     - master
   schedule:
-    - cron: '0 1 * * *' # it will be 6~7 am in our timezone
+    - cron: '0 10 * * *' # it will be ~3 pm in our timezone
 
 jobs:
   run-selenium-script:

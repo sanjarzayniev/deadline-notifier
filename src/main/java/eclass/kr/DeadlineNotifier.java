@@ -71,9 +71,7 @@ public class DeadlineNotifier {
                 wait.until(ExpectedConditions
                                 .presenceOfAllElementsLocatedBy(By.cssSelector(".btn.btn-xs.btn-default.btn-more")));
 
-                // driver.get(URL_FOR_TODAYS_EVENTS);
-
-                driver.get("https://eclass.inha.ac.kr/calendar/view.php?view=day&course=1&time=1729018800");
+                driver.get(URL_FOR_TODAYS_EVENTS);
 
                 sleep(3);
 
@@ -156,9 +154,9 @@ public class DeadlineNotifier {
                         String typeOfEvent,
                         String timeOfDeadline) {
                 System.out.println("\n" + count + ". Course Name: " + nameOfCourse);
-                System.out.println("   Event Name: " + nameOfEvent);
-                System.out.println("   Type: " + typeOfEvent);
-                System.out.println("   Deadline: " + timeOfDeadline);
+                System.out.println("    Event Name: " + nameOfEvent);
+                System.out.println("    Type: " + typeOfEvent);
+                System.out.println("    Deadline: " + timeOfDeadline);
         }
 
         public static void tearDown() {
