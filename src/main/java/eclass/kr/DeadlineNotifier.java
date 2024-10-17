@@ -154,9 +154,9 @@ public class DeadlineNotifier {
                         String typeOfEvent,
                         String timeOfDeadline) {
                 System.out.println("\n" + count + ". Course Name: " + nameOfCourse);
-                System.out.println("   Event Name: " + nameOfEvent);
-                System.out.println("   Type: " + typeOfEvent);
-                System.out.println("   Deadline: " + timeOfDeadline);
+                System.out.println("    Event Name: " + nameOfEvent);
+                System.out.println("    Type: " + typeOfEvent);
+                System.out.println("    Deadline: " + timeOfDeadline);
         }
 
         public static void tearDown() {
