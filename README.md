@@ -40,6 +40,12 @@ These are the very 4 repository secrets:
 - **TELEGRAM_BOT_TOKEN** - your own bot token to notify you daily about the deadlines. You get it from @BotFather after creating your bot.
 - **TELEGRAM_CHAT_ID** - the id of your telegram chat that your bot will be sending messages in. It can be your telegram profile id or your group id if you want to share it with your classmates as you guys have the same deadlines. If you are from CSE 22-03, you are lucky, so you don't have to worry, we are in the same group. It will be added to our telegram group, IMMEDIATELY.
 
+> [!TIP]
+> For TELEGRAM_CHAT_ID, you usually get this via `getUpdates()` endpoint of Telegram Bot API. But make sure to add your bot to your group, give the privilege to read messages by giving the admin rights and tag the bot and type the `/start` command. Here is how you can send a request to `getUpdates()` endpoint with curl:
+```bash
+curl -s -X GET "https://api.telegram.org/bot<YOUR_BOT_TOKEN>/getUpdates"
+```
+From the response you can get your TELEGRAM_CHAT_ID!
 ## Project Structure
 
 - `src/main/java/eclass/kr`: Contains the main application code.
