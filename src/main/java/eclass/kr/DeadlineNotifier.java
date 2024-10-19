@@ -6,8 +6,6 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
-import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.time.Duration;
 import java.time.LocalDate;
@@ -16,15 +14,6 @@ import io.github.bonigarcia.wdm.WebDriverManager;
 
 public class DeadlineNotifier {
         public static WebDriver driver;
-        public static final String URL = "https://eclass.inha.ac.kr/login.php";
-        public static final String URL_FOR_TODAYS_EVENTS = "https://eclass.inha.ac.kr/calendar/view.php?view=day";
-        public static final String DEADLINE_MESSAGE = "We do have some tasks to do. Here is the list of them:";
-        public static final String NO_DEADLINE_MESSAGE = "We have no deadline for today. So enjoy and chill!";
-        public static final String INVITE_MESSAGE = "You can also visit this page to see the upcoming events by yourself: ";
-        public static final String NOT_FOUND_DEADLINE_MESSAGE = "Could not fetch the deadline!";
-        public static final String VOD = "VOD";
-        public static final String NO_EVENT_MESSAGE = "There are no events this day.";
-        public static final int MIN_LENGTH_THAT_DEADLINE_CAN_BE = 5;
 
         public static void main(String[] args) {
                 setup();
@@ -53,65 +42,79 @@ public class DeadlineNotifier {
         }
 
         public static void login() {
-                driver.get(URL);
+                driver.get(Constants.URL);
                 driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
 
-                WebElement username = driver.findElement(By.id("input-username"));
-                username.sendKeys(System.getenv("ID"));
+                WebElement username = driver.findElement(By.id(Constants.USERNAME_SELECTOR));
+                username.sendKeys(Constants.ID);
 
-                WebElement password = driver.findElement(By.id("input-password"));
-                password.sendKeys(System.getenv("PASSWORD"));
+                WebElement password = driver.findElement(By.id(Constants.PASSWORD_SELECTOR));
+                password.sendKeys(Constants.PASSWORD);
 
-                WebElement logInButton = driver.findElement(By.cssSelector(".btn.btn-success"));
+                WebElement logInButton = driver.findElement(By.cssSelector(Constants.LOGIN_BUTTON_SELECTOR));
                 logInButton.click();
         }
 
-        public static void action() { // welcome to the mess
-                WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
-                wait.until(ExpectedConditions
-                                .presenceOfAllElementsLocatedBy(By.cssSelector(".btn.btn-xs.btn-default.btn-more")));
+        public static void action() { // welcome to mess
 
-                driver.get(URL_FOR_TODAYS_EVENTS);
+                driver.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(10));
 
-                sleep(3);
+                driver.get(Constants.URL_FOR_TODAYS_EVENTS);
 
-                printDate(); // today's date, of course
+                driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(5));
 
-                if (!driver.getPageSource().contains(NO_EVENT_MESSAGE)) {
-                        System.out.println("\n" + DEADLINE_MESSAGE);
+                printCurrentDate();
 
+                if (!driver.getPageSource().contains(Constants.NO_EVENT_MESSAGE)) {
                         sleep(5);
 
-                        String typeOfEvent;
-                        String nameOfEvent;
-                        String nameOfCourse;
-                        String timeOfDeadline = "Initial Value";
+                        String nameOfCourse = Constants.DEFAULT_VALUE,
+                                        nameOfEvent = Constants.DEFAULT_VALUE,
+                                        typeOfEvent = Constants.DEFAULT_VALUE,
+                                        timeOfDeadline = Constants.DEFAULT_VALUE;
 
                         JavascriptExecutor js = (JavascriptExecutor) driver;
+                        boolean isDeadlineMessageCalled = false;
                         int count = 1; // index for for-each loop
 
                         for (WebElement event : driver.findElements(By.className("card"))) {
-                                typeOfEvent = event.findElement(By.tagName("img")).getAttribute("title");
-                                nameOfEvent = event.findElement(By.tagName("h3")).findElement(By.tagName("a"))
-                                                .getText();
+                                if (!event.findElement(By.tagName("img")).getAttribute("alt").equals("Course event")) {
+                                        if (!isDeadlineMessageCalled) {
+                                                System.out.println("\n" + Constants.DEADLINE_MESSAGE);
+                                                isDeadlineMessageCalled = true;
+                                        }
+                                        typeOfEvent = event.findElement(By.tagName("img")).getAttribute("title");
+                                        nameOfEvent = event.findElement(By.tagName("h3")).findElement(By.tagName("a"))
+                                                        .getText();
 
-                                nameOfCourse = event.findElement(By.tagName("div")).findElement(By.tagName("div"))
-                                                .findElement(By.tagName("a")).getText();
+                                        nameOfCourse = event.findElement(By.tagName("div"))
+                                                        .findElement(By.tagName("div"))
+                                                        .findElement(By.tagName("a")).getText();
 
-                                timeOfDeadline = parseDeadline(timeOfDeadline, event);
+                                        timeOfDeadline = parseDeadline(timeOfDeadline, event);
+                                        if (typeOfEvent.equals(Constants.VOD)) {
+                                                typeOfEvent = "Video";
+                                        }
 
-                                if (typeOfEvent.equals(VOD)) {
-                                        typeOfEvent = "Video";
+                                        printInfo(count, nameOfCourse, nameOfEvent, typeOfEvent, timeOfDeadline);
+                                        count++;
+                                        js.executeScript(Constants.JS_SCRIPT); // scroll down by 550 pixels vertically
+                                } else {
+                                        continue;
                                 }
-
-                                printInfo(count, nameOfCourse, nameOfEvent, typeOfEvent, timeOfDeadline);
-                                count++;
-                                js.executeScript("window.scrollBy(0, 600)"); // scroll down by 600 pixels vertically
                         }
-                        System.out.println(
-                                        "\n" + INVITE_MESSAGE + URL_FOR_TODAYS_EVENTS);
+
+                        if (nameOfCourse.equals(Constants.DEFAULT_VALUE) &&
+                                        nameOfEvent.equals(Constants.DEFAULT_VALUE) &&
+                                        typeOfEvent.equals(Constants.DEFAULT_VALUE) &&
+                                        timeOfDeadline.equals(Constants.DEFAULT_VALUE)) {
+                                printNoDeadlineMessage();
+                        } else {
+                                System.out.println(
+                                                "\n" + Constants.INVITE_MESSAGE + Constants.URL_FOR_TODAYS_EVENTS);
+                        }
                 } else {
-                        System.out.println("\n" + NO_DEADLINE_MESSAGE);
+                        printNoDeadlineMessage();
                 }
         }
 
@@ -123,7 +126,7 @@ public class DeadlineNotifier {
                 }
         }
 
-        public static void printDate() {
+        public static void printCurrentDate() {
                 System.out.println("Today is " + LocalDate.now().getMonth() + " " + LocalDate.now().getDayOfMonth()
                                 + ", " + LocalDate.now().getYear());
         }
@@ -137,7 +140,7 @@ public class DeadlineNotifier {
                         timeOfDeadline = deadlineParts[1].trim(); // take the second part after »
                 }
 
-                if (timeOfDeadline.length() == MIN_LENGTH_THAT_DEADLINE_CAN_BE) {
+                if (timeOfDeadline.length() == Constants.MIN_LENGTH_THAT_DEADLINE_CAN_BE) {
                         timeOfDeadline = "Today at " + timeOfDeadline;
                 }
 
@@ -157,6 +160,10 @@ public class DeadlineNotifier {
                 System.out.println("    Event Name: " + nameOfEvent);
                 System.out.println("    Type: " + typeOfEvent);
                 System.out.println("    Deadline: " + timeOfDeadline);
+        }
+
+        public static void printNoDeadlineMessage() {
+                System.out.println("\n" + Constants.NO_DEADLINE_MESSAGE);
         }
 
         public static void tearDown() {

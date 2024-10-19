@@ -3,10 +3,10 @@ name: Run Selenium Java application built with Maven
 on:
   # push: # commment for easy access
   #   branches:
-  #     - master
-  # pull_request:
-  #   branches:
-  #     - master
+  #     - dev
+  # # pull_request:
+  # #   branches:
+  # #     - master
   schedule:
     - cron: "0 1 * * *" # it will be 6~7 am in our timezone
 
@@ -27,11 +27,11 @@ jobs:
           distribution: "temurin"
           java-version: "11"
 
-      # Set up Chrome browser (pre-installed on GitHub runners)
+      # Set up Chrome browser (already installed on GitHub runners)
       - name: Set up Chrome browser
         run: google-chrome --version
 
-      # Cache Maven dependencies (improves build times)
+      # Cache Maven dependencies (to improve build times)
       - name: Cache Maven dependencies
         uses: actions/cache@v2
         with:
