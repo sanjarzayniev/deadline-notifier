@@ -32,7 +32,7 @@ It is nothing but a simple application written in `java` that scrapes data with 
 > [!NOTE]
 > When forking, do not forget to fork from the master branch as it is the one you need. In the dev branch, i usually test some modifications that may be upcoming.
 
-These are the very 4 secret repository secrets:
+These are the very 4 repository secrets:
 ![Repo Secrets](./images/secrets.png)
 
 - **ID** - your student ID to login (U2....).
