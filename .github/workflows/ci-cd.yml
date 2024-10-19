@@ -1,14 +1,14 @@
 name: Run Selenium Java application built with Maven
 
 on:
-  push: # commment for easy access
-    branches:
-      - dev
-  # pull_request:
+  # push: # commment for easy access
   #   branches:
-  #     - master
+  #     - dev
+  # # pull_request:
+  # #   branches:
+  # #     - master
   schedule:
-    - cron: '0 10 * * *' # it will be ~3 pm in our timezone
+    - cron: '0 1 * * *' # it will be 6~7 am in our timezone
 
 jobs:
   run-selenium-script:
@@ -27,11 +27,11 @@ jobs:
           distribution: "temurin"
           java-version: "11"
 
-      # Set up Chrome browser (pre-installed on GitHub runners)
+      # Set up Chrome browser (already installed on GitHub runners)
       - name: Set up Chrome browser
         run: google-chrome --version
 
-      # Cache Maven dependencies (improves build times)
+      # Cache Maven dependencies (to improve build times)
       - name: Cache Maven dependencies
         uses: actions/cache@v2
         with:
@@ -48,7 +48,7 @@ jobs:
       - name: Run Selenium script & Notify via Telegram
         run: |
           mvn exec:java -Dexec.mainClass="eclass.kr.DeadlineNotifier" > OUTPUT.txt
-          curl -s -X POST https://api.telegram.org/bot${{ secrets.DEV_TELEGRAM_BOT_TOKEN }}/sendMessage -d chat_id=${{ secrets.DEV_TELEGRAM_CHAT_ID }} -d text="$(sed -n '/Today/,/^Bye/{/^Bye/d;p}' OUTPUT.txt)"
+          curl -s -X POST https://api.telegram.org/bot${{ secrets.TELEGRAM_BOT_TOKEN }}/sendMessage -d chat_id=${{ secrets.TELEGRAM_CHAT_ID }} -d text="$(sed -n '/Today/,/^Bye/{/^Bye/d;p}' OUTPUT.txt)"
         env:
-          ID: ${{ secrets.DEV_ID }}
-          PASSWORD: ${{ secrets.DEV_PASSWORD }}
+          ID: ${{ secrets.ID }}
+          PASSWORD: ${{ secrets.PASSWORD }}

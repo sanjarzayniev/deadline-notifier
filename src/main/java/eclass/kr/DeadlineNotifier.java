@@ -6,8 +6,6 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
-import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.time.Duration;
 import java.time.LocalDate;
@@ -24,6 +22,11 @@ public class DeadlineNotifier {
         public static final String NOT_FOUND_DEADLINE_MESSAGE = "Could not fetch the deadline!";
         public static final String VOD = "VOD";
         public static final String NO_EVENT_MESSAGE = "There are no events this day.";
+        public static final String DEFAULT_VALUE = "NOT FOUND";
+        public static final String USERNAME_SELECTOR = "input-username";
+        public static final String PASSWORD_SELECTOR = "input-password";
+        public static final String LOGIN_BUTTON_SELECTOR = ".btn.btn-success";
+        public static final String JS_SCRIPT = "window.scrollBy(0, 550)";
         public static final int MIN_LENGTH_THAT_DEADLINE_CAN_BE = 5;
 
         public static void main(String[] args) {
@@ -56,62 +59,77 @@ public class DeadlineNotifier {
                 driver.get(URL);
                 driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
 
-                WebElement username = driver.findElement(By.id("input-username"));
+                WebElement username = driver.findElement(By.id(USERNAME_SELECTOR));
                 username.sendKeys(System.getenv("ID"));
 
-                WebElement password = driver.findElement(By.id("input-password"));
+                WebElement password = driver.findElement(By.id(PASSWORD_SELECTOR));
                 password.sendKeys(System.getenv("PASSWORD"));
 
-                WebElement logInButton = driver.findElement(By.cssSelector(".btn.btn-success"));
+                WebElement logInButton = driver.findElement(By.cssSelector(LOGIN_BUTTON_SELECTOR));
                 logInButton.click();
         }
 
         public static void action() { // welcome to the mess
-                WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
-                wait.until(ExpectedConditions
-                                .presenceOfAllElementsLocatedBy(By.cssSelector(".btn.btn-xs.btn-default.btn-more")));
+
+                driver.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(10));
 
                 driver.get(URL_FOR_TODAYS_EVENTS);
 
-                sleep(3);
+                driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(5));
 
                 printDate(); // today's date, of course
 
                 if (!driver.getPageSource().contains(NO_EVENT_MESSAGE)) {
-                        System.out.println("\n" + DEADLINE_MESSAGE);
-
                         sleep(5);
 
-                        String typeOfEvent;
-                        String nameOfEvent;
-                        String nameOfCourse;
-                        String timeOfDeadline = "Initial Value";
+                        String nameOfCourse = DEFAULT_VALUE;
+                        String nameOfEvent = DEFAULT_VALUE;
+                        String typeOfEvent = DEFAULT_VALUE;
+                        String timeOfDeadline = DEFAULT_VALUE;
 
                         JavascriptExecutor js = (JavascriptExecutor) driver;
+                        boolean isDeadlineMessageCalled = false;
                         int count = 1; // index for for-each loop
 
                         for (WebElement event : driver.findElements(By.className("card"))) {
-                                typeOfEvent = event.findElement(By.tagName("img")).getAttribute("title");
-                                nameOfEvent = event.findElement(By.tagName("h3")).findElement(By.tagName("a"))
-                                                .getText();
 
-                                nameOfCourse = event.findElement(By.tagName("div")).findElement(By.tagName("div"))
-                                                .findElement(By.tagName("a")).getText();
+                                if (!event.findElement(By.tagName("img")).getAttribute("alt").equals("Course event")) {
+                                        if (!isDeadlineMessageCalled) {
+                                                System.out.println("\n" + DEADLINE_MESSAGE);
+                                                isDeadlineMessageCalled = true;
+                                        }
+                                        typeOfEvent = event.findElement(By.tagName("img")).getAttribute("title");
+                                        nameOfEvent = event.findElement(By.tagName("h3")).findElement(By.tagName("a"))
+                                                        .getText();
 
-                                timeOfDeadline = parseDeadline(timeOfDeadline, event);
+                                        nameOfCourse = event.findElement(By.tagName("div"))
+                                                        .findElement(By.tagName("div"))
+                                                        .findElement(By.tagName("a")).getText();
 
-                                if (typeOfEvent.equals(VOD)) {
-                                        typeOfEvent = "Video";
+                                        timeOfDeadline = parseDeadline(timeOfDeadline, event);
+                                        if (typeOfEvent.equals(VOD)) {
+                                                typeOfEvent = "Video";
+                                        }
+
+                                        printInfo(count, nameOfCourse, nameOfEvent, typeOfEvent, timeOfDeadline);
+                                        count++;
+                                        js.executeScript(JS_SCRIPT); // scroll down by 550 pixels vertically
+                                } else {
+                                        continue;
                                 }
-
-                                printInfo(count, nameOfCourse, nameOfEvent, typeOfEvent, timeOfDeadline);
-                                count++;
-                                js.executeScript("window.scrollBy(0, 550)"); // scroll down by 550 pixels vertically
                         }
-                        System.out.println(
-                                        "\n" + INVITE_MESSAGE + URL_FOR_TODAYS_EVENTS);
+
+                        if (nameOfCourse.equals(DEFAULT_VALUE) &&
+                                        nameOfEvent.equals(DEFAULT_VALUE) &&
+                                        typeOfEvent.equals(DEFAULT_VALUE) &&
+                                        timeOfDeadline.equals(DEFAULT_VALUE)) {
+                                printNoDeadlineMessage();
+                        } else {
+                                System.out.println(
+                                                "\n" + INVITE_MESSAGE + URL_FOR_TODAYS_EVENTS);
+                        }
                 } else {
-                        System.out.println("\n" + NO_DEADLINE_MESSAGE);
+                        printNoDeadlineMessage();
                 }
         }
 
@@ -157,6 +175,10 @@ public class DeadlineNotifier {
                 System.out.println("    Event Name: " + nameOfEvent);
                 System.out.println("    Type: " + typeOfEvent);
                 System.out.println("    Deadline: " + timeOfDeadline);
+        }
+
+        public static void printNoDeadlineMessage() {
+                System.out.println("\n" + NO_DEADLINE_MESSAGE);
         }
 
         public static void tearDown() {
