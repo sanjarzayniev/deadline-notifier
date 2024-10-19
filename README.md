@@ -27,7 +27,7 @@ It is nothing but a simple application written in `java` that scrapes data with 
 ## Setup and Installation
 
 > [!IMPORTANT]
-> Actually, you don't need to install & run it locally. You just need to fork this repo on GitHub and add 4 repository secrets & create a telegram bot by yourself to get the benefit of this project. And it will itself notify you about your forthcoming deadlines for today(Assignment, Quiz, Video) and later (available only for videos)!
+> Actually, you don't need to install & run it locally. You just need to fork this repo on GitHub and add 4 repository secrets & create a telegram bot by yourself to get the benefit of this project. And it will itself notify you about your forthcoming deadlines for today(Assignment, Quiz, Video, which means all type of deadlines) and later (available only for videos)!
 
 > [!NOTE]
 > When forking, do not forget to fork from the master branch as it is the one you need. In the dev branch, i usually test some modifications that may be upcoming.
@@ -38,7 +38,7 @@ These are the very 4 repository secrets:
 - **ID** - your student ID to login (U2....).
 - **PASSWORD** - your password for eclass.
 - **TELEGRAM_BOT_TOKEN** - your own bot token to notify you daily about the deadlines. You get it from @BotFather after creating your bot.
-- **TELEGRAM_CHAT_ID** - the id of your telegram chat that your bot will be sending messages in. It can be your telegram profile id or your group id if you want to share it with your classmates as you guys have the same deadlines. If you are from CSE 22-03, you are lucky, so you don't have to worry, we are in the same group. It will be added to our telegram group, IMMEDIATELY.
+- **TELEGRAM_CHAT_ID** - the id of your telegram chat that your bot will be sending messages in. It can be your telegram profile id or your group id - if you want to share it with your classmates as you guys have the same deadlines. If you are from CSE 22-03, you are lucky, so you don't have to worry, we are in the same group. It will be added to our telegram group, IMMEDIATELY. (upd: added✅)
 
 > [!TIP]
 > For TELEGRAM_CHAT_ID, you usually get this via `getUpdates()` endpoint of Telegram Bot API. But make sure to add your bot to your group, give the privilege to read messages by giving the admin rights and tag the bot and type the `/start` command. Here is how you can send a request to `getUpdates()` endpoint with curl:
@@ -57,13 +57,14 @@ From the response you can get your TELEGRAM_CHAT_ID!
   - `login()`: Logs into the e-class website using credentials stored in repository secrets.
   - `action()`: Retrieves and processes deadlines and event data from the page & does the whole action (mess).
   - `sleep()`: Customized (Overriden) version of Thread.sleep(long milliseconds) method.
-  - `printDate()`: Prints today's date to console.
+  - `printCurrentDate()`: Prints today's date to console.
   - `parseDeadline()`: Gets the deadline string and cuts & trims & makes it 'odambashara'.
   - `printInfo()`: Prints the core message & events' list.
+  - `printNoDeadlineMessage()`: naming speaks for itself!
   - `tearDown()`: Closes the WebDriver and cleans up resources.
 
 - `.github/workflows/ci-cd.yml`:
-  - put on scheduled cron, that runs the project at 6 am, once a day and sends a request to a telegram bot api with curl.
+  - put on scheduled cron, that runs the project at around 7 am (which you can also modify by yourself if you want) and sends a request to a telegram bot api with curl every day.
 
 ## Contributing
 
