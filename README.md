@@ -1,5 +1,8 @@
 # deadline-notifier ⏰
 
+> [!Warning]
+> It works only for students of Inha University in Tashkent!
+
 ## Table of Contents 📋
 
 - [About the Project](#about-the-project)
@@ -19,11 +22,15 @@ It is nothing but a simple application written in `java` that scrapes data with 
 - **Selenium WebDriver 4.17.0**: For browser automation & scraping.
 - **Maven 3.6.3**: Build and dependency management tool.
 - **WebDriver Manager 5.8.0**: For automatic browser driver management (setup).
-- **GitHub Actions**: To continiously run the project and send the output via telegram bot every day.
+- **GitHub Actions**: To continiously run the project and send the output via telegram bot once a day.
 
 ## Setup and Installation
 
-Actually, you don't need to install & run it locally. You just need to fork this repo on GitHub and add 4 repository secrets & create a telegram bot by yourself to get the benefit of this project. And it will itself notify you about your forthcoming deadlines for today(Assignment, Quiz, Video) and later (available only for videos)!
+> [!IMPORTANT]
+> Actually, you don't need to install & run it locally. You just need to fork this repo on GitHub and add 4 repository secrets & create a telegram bot by yourself to get the benefit of this project. And it will itself notify you about your forthcoming deadlines for today(Assignment, Quiz, Video) and later (available only for videos)!
+
+> [!NOTE]
+> When forking, do not forget to fork from the master branch as it is the one you need. In the dev branch, i usually test some modifications that may be upcoming.
 
 These are the very 4 secret repository secrets:
 ![Repo Secrets](./images/secrets.png)
@@ -33,13 +40,12 @@ These are the very 4 secret repository secrets:
 - **TELEGRAM_BOT_TOKEN** - your own bot token to notify you daily about the deadlines. You get it from @BotFather.
 - **TELEGRAM_CHAT_ID** - the id of your telegram chat that your bot will be sending messages in. It can be your telegram profile id or your group id if you want to share it with your classmates as you guys have the same deadlines. If you are from CSE 22-03, you are lucky, so you don't have to worry, we are in the same group. It will be added to our telegram group, IMMEDIATELY.
 
-However, you feel like to contribute or add some features on it. You need to follow these steps to set up the environment:
+However, you feel like to contribute or add some features on it. You need to follow these steps after forking the repo to set up the environment:
 
 1. **Clone the repository**:
 
    ```bash
-   git clone https://github.com/sanjarzayniev/deadline-notifier.git
-
+   git clone https://github.com/<your-username>/deadline-notifier.git
    ```
 
 2. **Ensure you have the following installed**:
@@ -118,10 +124,13 @@ However, you feel like to contribute or add some features on it. You need to fol
    - **Verify the output**:
      - After running the program, the output will be displayed in the console, showing whether there are upcoming events, deadlines, and other related information.
 
+9. At the end of the day, just push your changes and open a pull request to be merged.
+
 ## Project Structure
 
 - `src/main/java/eclass/kr`: Contains the main application code.
   - **`DeadlineNotifier.java`**: The primary class that performs the web scraping and automation tasks.
+  - **`Constants.java`**: Contains the static variables that will never change dynamically.
 - Key methods in `DeadlineNotifier.java`:
 
   - `setup()`: Initializes the WebDriver and sets Chrome options.
