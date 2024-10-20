@@ -46,6 +46,25 @@ These are the very 4 repository secrets:
 curl -s -X GET "https://api.telegram.org/bot<YOUR_BOT_TOKEN>/getUpdates"
 ```
 From the response you can get your TELEGRAM_CHAT_ID!
+
+And if you do not change the time from the workflow file (ci-cd.yml), it will notify you around 7 am by default. If you want to change it, it is recommended to put after 7 am, which looks like this in that file:
+```yml
+on:
+  # push: # commment for easy access
+  #   branches:
+  #     - dev
+  # # pull_request:
+  # #   branches:
+  # #     - master
+  schedule:
+    - cron: "0 1 * * *" # it will be 6~7 am in our timezone
+```
+1 is in GMT timezone, for customization just subtract the time you want to be notified by 5 or 6. Then the bot sends you a message like this:
+
+<p align="center">
+  <img src="./images/result.png">
+</p>
+
 ## Project Structure
 
 - `src/main/java/eclass/kr`: Contains the main application code.
