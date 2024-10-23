@@ -96,6 +96,21 @@ public class DeadlineNotifier {
                                                 typeOfEvent = "Video";
                                         }
 
+                                        if (nameOfEvent.contains("&")) { // specific edge case for OS & SP courses
+                                                                         // (Thank you, prof. Naseer!)
+                                                String[] partsOfNameOfEvent = nameOfEvent.split("&");
+                                                nameOfEvent = "";
+                                                for (int i = 0; i < partsOfNameOfEvent.length; i++) {
+                                                        if (i == partsOfNameOfEvent.length - 1) {
+                                                                nameOfEvent = nameOfEvent
+                                                                                + partsOfNameOfEvent[i].trim();
+                                                        } else {
+                                                                nameOfEvent = nameOfEvent + partsOfNameOfEvent[i].trim()
+                                                                                + " ";
+                                                        }
+                                                }
+                                        }
+
                                         printInfo(count, nameOfCourse, nameOfEvent, typeOfEvent, timeOfDeadline);
                                         count++;
                                         js.executeScript(Constants.JS_SCRIPT); // scroll down by 550 pixels vertically
