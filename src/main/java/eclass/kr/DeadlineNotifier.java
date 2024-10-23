@@ -106,7 +106,7 @@ public class DeadlineNotifier {
                                                                                 + partsOfNameOfEvent[i].trim();
                                                         } else {
                                                                 nameOfEvent = nameOfEvent + partsOfNameOfEvent[i].trim()
-                                                                                + " & ";
+                                                                                + " ";
                                                         }
                                                 }
                                         }
