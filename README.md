@@ -53,9 +53,9 @@ on:
   # push: # commment for easy access
   #   branches:
   #     - dev
-  # # pull_request:
-  # #   branches:
-  # #     - master
+  # pull_request:
+  #   branches:
+  #     - master
   schedule:
     - cron: "0 1 * * *" # it will be 6~7 am in our timezone
 ```
