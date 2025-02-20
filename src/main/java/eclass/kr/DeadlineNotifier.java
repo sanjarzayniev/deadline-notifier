@@ -175,7 +175,7 @@ public class DeadlineNotifier {
             }
         } else {
             String[] parts = timeOfDeadline.split(",");
-            timeOfDeadline = parts[0] + parts[1] + " at" + parts[2] + " 🥱";
+            timeOfDeadline = parts[0] + "," + parts[1] + " at" + parts[2] + " 🥱";
         }
 
         return timeOfDeadline;

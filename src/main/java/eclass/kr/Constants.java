@@ -3,7 +3,7 @@ package eclass.kr;
 public class Constants {
     public static final String URL = "https://eclass.inha.ac.kr/login.php",
             URL_FOR_WEEKLY_EVENTS = "https://eclass.inha.ac.kr/calendar/view.php",
-            DEADLINE_MESSAGE = "Here is the list of deadlines for upcoming 7 days:",
+            DEADLINE_MESSAGE = "Here is the list of deadlines for upcoming 7 days :" + "\n\nNew feature, btw. Version 1.2.0 is out! Support the project by starring the repository: https://github.com/sanjarzayniev/deadline-notifier",
             NO_DEADLINE_MESSAGE = "No deadline. So keep working",
             INVITE_MESSAGE = "Visit this page to check them by yourself: ",
             VOD = "VOD",
