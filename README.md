@@ -14,7 +14,7 @@
 
 ## About the Project
 
-It is nothing but a simple application written in `java` that scrapes data with `selenium` and notifies about the upcoming deadlines for today via telegram bot.
+It is nothing but a serverless application that scrapes data with `selenium` UI automation framework and notifies about the upcoming deadlines of 7 days ahead via telegram bot.
 
 ## Technologies Used
 
@@ -76,7 +76,7 @@ on:
   - `login()`: Logs into the e-class website using credentials stored in repository secrets.
   - `action()`: Retrieves and processes deadlines and event data from the page & does the whole action (mess).
   - `sleep()`: Customized (Overriden) version of Thread.sleep(long milliseconds) method.
-  - `printCurrentDate()`: Prints today's date to console.
+  - `printTodaysDate()`: Prints today's date to console.
   - `parseDeadline()`: Gets the deadline string and cuts & trims & makes it 'odambashara'.
   - `printInfo()`: Prints the core message & events' list.
   - `printNoDeadlineMessage()`: naming speaks for itself!

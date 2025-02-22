@@ -77,10 +77,11 @@ public class DeadlineNotifier {
 
             JavascriptExecutor js = (JavascriptExecutor) driver;
             boolean isDeadlineMessageCalled = false;
-            int count = 1; // index for for-each loop
+            int count = 1; // index for for-each loop and will be to print the order
 
             for (WebElement event : driver.findElements(By.className("card"))) {
-                if (!event.findElement(By.tagName("img")).getAttribute("alt").equals("Course event")) {
+                if (!event.findElement(By.tagName("img")).getAttribute("alt").equals("Course event")
+                        && !event.findElement(By.tagName("span")).getText().equals("Today, 00:00")) {
                     if (!isDeadlineMessageCalled) {
                         System.out.println("\n" + Constants.DEADLINE_MESSAGE);
                         isDeadlineMessageCalled = true;
@@ -160,7 +161,7 @@ public class DeadlineNotifier {
         }
 
         if (timeOfDeadline.length() == Constants.MIN_LENGTH_THAT_DEADLINE_CAN_BE) {
-            int random = Math.abs((new Random()).nextInt(10));
+            int random = Math.abs((new Random()).nextInt(11));
             timeOfDeadline = "Today at " + timeOfDeadline + " " + Constants.randomEmojis[random];
         }
 
