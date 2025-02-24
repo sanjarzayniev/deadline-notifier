@@ -160,20 +160,25 @@ public class DeadlineNotifier {
             timeOfDeadline = deadlineParts[1].trim(); // take the second part after »
         }
 
-        if (timeOfDeadline.length() == Constants.MIN_LENGTH_THAT_DEADLINE_CAN_BE) {
-            int random = Math.abs((new Random()).nextInt(11));
-            timeOfDeadline = "Today at " + timeOfDeadline + " " + Constants.randomEmojis[random];
-        }
+        // if (timeOfDeadline.length() == Constants.MIN_LENGTH_THAT_DEADLINE_CAN_BE) {
+        // int random = Math.abs((new Random()).nextInt(11));
+        // timeOfDeadline = "Today at " + timeOfDeadline + " " +
+        // Constants.randomEmojis[random];
+        // } // no longer need this part i think 24.02.25
 
         if (timeOfDeadline.startsWith("Tomorrow")) {
             if (timeOfDeadline.split(",")[1].equals(" 00:00")) {
                 timeOfDeadline = timeOfDeadline.replace(",", " at");
-                int random = Math.abs((new Random()).nextInt(10));
+                int random = Math.abs((new Random()).nextInt(11));
                 timeOfDeadline = timeOfDeadline + " " + Constants.randomEmojis[random];
             } else {
                 timeOfDeadline = timeOfDeadline.replace(",", " at");
                 timeOfDeadline = timeOfDeadline + " 🤫";
             }
+        } else if (timeOfDeadline.startsWith("Today")) {
+            String[] parts = timeOfDeadline.split(",");
+            int random = Math.abs((new Random()).nextInt(11));
+            timeOfDeadline = parts[0] + " at" + parts[1] + " " + Constants.randomEmojis[random];
         } else {
             String[] parts = timeOfDeadline.split(",");
             timeOfDeadline = parts[0] + "," + parts[1] + " at" + parts[2] + " 🥱";
