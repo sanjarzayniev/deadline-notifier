@@ -28,15 +28,6 @@ jobs:
       - name: Set up Chrome browser
         run: google-chrome --version
 
-      # Cache Maven dependencies (to improve build times)
-      - name: Cache Maven dependencies
-        uses: actions/cache@v2
-        with:
-          path: ~/.m2/repository
-          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
-          restore-keys: |
-            ${{ runner.os }}-maven-
-
       # Install dependencies with Maven
       - name: Build with Maven
         run: mvn install
