@@ -1,10 +1,10 @@
 name: Run Selenium Java application built with Maven
 
 on:
-   push: # commment for easy access
+  push: # commment for easy access
      branches:
        - master
-   pull_request:
+  pull_request:
      branches:
        - master
   schedule:
