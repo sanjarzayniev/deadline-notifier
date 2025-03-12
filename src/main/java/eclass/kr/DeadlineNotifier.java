@@ -95,24 +95,13 @@ public class DeadlineNotifier {
                             .findElement(By.tagName("a")).getText();
 
                     timeOfDeadline = parseDeadline(timeOfDeadline, event);
+
                     if (typeOfEvent.equals(Constants.VOD)) {
                         typeOfEvent = "Video";
                     }
 
-                    if (nameOfEvent.contains("&")) { // specific edge case for OS & SP courses
-                                                     // (Thank you, prof. Naseer!)
-                        String[] partsOfNameOfEvent = nameOfEvent.split("&");
-                        nameOfEvent = "";
-                        for (int i = 0; i < partsOfNameOfEvent.length; i++) {
-                            if (i == partsOfNameOfEvent.length - 1) {
-                                nameOfEvent = nameOfEvent
-                                        + partsOfNameOfEvent[i].trim();
-                            } else {
-                                nameOfEvent = nameOfEvent + partsOfNameOfEvent[i].trim()
-                                        + " ";
-                            }
-                        }
-                    }
+                    nameOfCourse = ignoreAmpersand(nameOfCourse);
+                    nameOfEvent = ignoreAmpersand(nameOfEvent);
 
                     printInfo(count, nameOfCourse, nameOfEvent, typeOfEvent, timeOfDeadline);
                     count++;
@@ -160,12 +149,6 @@ public class DeadlineNotifier {
             timeOfDeadline = deadlineParts[1].trim(); // take the second part after »
         }
 
-        // if (timeOfDeadline.length() == Constants.MIN_LENGTH_THAT_DEADLINE_CAN_BE) {
-        // int random = Math.abs((new Random()).nextInt(11));
-        // timeOfDeadline = "Today at " + timeOfDeadline + " " +
-        // Constants.randomEmojis[random];
-        // } // no longer need this part i think 24.02.25
-
         if (timeOfDeadline.startsWith("Tomorrow")) {
             if (timeOfDeadline.split(",")[1].equals(" 00:00")) {
                 timeOfDeadline = timeOfDeadline.replace(",", " at");
@@ -185,6 +168,28 @@ public class DeadlineNotifier {
         }
 
         return timeOfDeadline;
+    }
+
+    /*
+     * specific edge case for OS & SP & DAD courses (Thank you, prof. Naseer and
+     * Agoustini)
+     */
+    public static String ignoreAmpersand(String attribute) {
+        if (attribute.contains("&")) {
+            String[] parts = attribute.split("&");
+            attribute = "";
+            for (int i = 0; i < parts.length; i++) {
+                if (i == parts.length - 1) {
+                    attribute = attribute
+                            + parts[i].trim();
+                } else {
+                    attribute = attribute + parts[i].trim()
+                            + " ";
+                }
+            }
+        }
+
+        return attribute;
     }
 
     public static void printInfo(int count,
