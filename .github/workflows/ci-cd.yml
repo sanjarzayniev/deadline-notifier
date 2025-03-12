@@ -1,9 +1,9 @@
 name: Run Selenium Java application built with Maven
 
 on:
-  push: # commment for easy access
-     branches:
-       - master
+#   push: # commment for easy access
+#      branches:
+#        - master
   pull_request:
      branches:
        - master
@@ -28,7 +28,6 @@ jobs:
       - name: Set up Chrome browser
         run: google-chrome --version
 
-      # Install dependencies with Maven
       - name: Build with Maven
         run: mvn install
 
