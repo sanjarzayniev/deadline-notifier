@@ -28,7 +28,6 @@ jobs:
       - name: Set up Chrome browser
         run: google-chrome --version
 
-      # Install dependencies with Maven
       - name: Build with Maven
         run: mvn install
 
@@ -36,7 +35,7 @@ jobs:
       - name: Run Selenium script & Notify via Telegram
         run: |
           mvn exec:java -Dexec.mainClass="eclass.kr.DeadlineNotifier" > OUTPUT.txt
-          curl -s -X POST https://api.telegram.org/bot${{ secrets.TELEGRAM_BOT_TOKEN }}/sendMessage -d chat_id=${{ secrets.DEV_TELEGRAM_CHAT_ID }} -d text="$(sed -n '/Today/,/^Bye/{/^Bye/d;p}' OUTPUT.txt)"
+          curl -s -X POST https://api.telegram.org/bot${{ secrets.TELEGRAM_BOT_TOKEN }}/sendMessage -d chat_id=${{ secrets.TELEGRAM_CHAT_ID }} -d text="$(sed -n '/Today/,/^Bye/{/^Bye/d;p}' OUTPUT.txt)"
         env:
           ID: ${{ secrets.ID }}
           PASSWORD: ${{ secrets.PASSWORD }}
