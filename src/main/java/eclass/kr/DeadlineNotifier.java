@@ -9,7 +9,6 @@ import org.openqa.selenium.chrome.ChromeOptions;
 
 import java.time.Duration;
 import java.time.LocalDate;
-import java.util.Random;
 
 import io.github.bonigarcia.wdm.WebDriverManager;
 
@@ -81,7 +80,7 @@ public class DeadlineNotifier {
 
             for (WebElement event : driver.findElements(By.className("card"))) {
                 if (!event.findElement(By.tagName("img")).getAttribute("alt").equals("Course event")
-                        && !event.findElement(By.tagName("span")).getText().equals("Today, 00:00")) {
+                        && !event.findElement(By.tagName("span")).getText().startsWith("Today, 00:")) {
                     if (!isDeadlineMessageCalled) {
                         System.out.println("\n" + Constants.DEADLINE_MESSAGE);
                         isDeadlineMessageCalled = true;
@@ -116,9 +115,6 @@ public class DeadlineNotifier {
                     typeOfEvent.equals(Constants.DEFAULT_VALUE) &&
                     timeOfDeadline.equals(Constants.DEFAULT_VALUE)) {
                 printNoDeadlineMessage();
-            } else {
-                System.out.println(
-                        "\n" + Constants.INVITE_MESSAGE + Constants.URL_FOR_WEEKLY_EVENTS);
             }
         } else {
             printNoDeadlineMessage();
@@ -150,21 +146,19 @@ public class DeadlineNotifier {
         }
 
         if (timeOfDeadline.startsWith("Tomorrow")) {
-            if (timeOfDeadline.split(",")[1].equals(" 00:00")) {
-                timeOfDeadline = timeOfDeadline.replace(",", " at");
-                int random = Math.abs((new Random()).nextInt(11));
-                timeOfDeadline = timeOfDeadline + " " + Constants.randomEmojis[random];
+            if (timeOfDeadline.split(",")[1].startsWith(" 00:")) {
+                timeOfDeadline = timeOfDeadline.replace("Tomorrow,", "At the next" + timeOfDeadline.split(",")[1]);
+                timeOfDeadline = timeOfDeadline + " 🔴";
             } else {
                 timeOfDeadline = timeOfDeadline.replace(",", " at");
-                timeOfDeadline = timeOfDeadline + " 🤫";
+                timeOfDeadline = timeOfDeadline + " 🟡";
             }
         } else if (timeOfDeadline.startsWith("Today")) {
             String[] parts = timeOfDeadline.split(",");
-            int random = Math.abs((new Random()).nextInt(11));
-            timeOfDeadline = parts[0] + " at" + parts[1] + " " + Constants.randomEmojis[random];
+            timeOfDeadline = parts[0] + " at" + parts[1] + " 🔴";
         } else {
             String[] parts = timeOfDeadline.split(",");
-            timeOfDeadline = parts[0] + "," + parts[1] + " at" + parts[2] + " 🥱";
+            timeOfDeadline = parts[0] + "," + parts[1] + " at" + parts[2] + " 🟢";
         }
 
         return timeOfDeadline;

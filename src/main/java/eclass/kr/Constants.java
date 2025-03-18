@@ -15,6 +15,4 @@ public class Constants {
             JS_SCRIPT = "window.scrollBy(0, 550)",
             ID = System.getenv("ID"),
             PASSWORD = System.getenv("PASSWORD");
-    public static final int MIN_LENGTH_THAT_DEADLINE_CAN_BE = 5;
-    public final static String[] randomEmojis = { "🤲", "🤯", "😈", "😲", "💀", "👀", "🥶", "🤡", "😫", "😳", "🗣" };
 }
