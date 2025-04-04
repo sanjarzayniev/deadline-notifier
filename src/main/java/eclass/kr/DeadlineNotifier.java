@@ -147,7 +147,7 @@ public class DeadlineNotifier {
 
         if (timeOfDeadline.startsWith("Tomorrow")) {
             if (timeOfDeadline.split(",")[1].startsWith(" 00:")) {
-                timeOfDeadline = timeOfDeadline.replace("Tomorrow,", "At the next" + timeOfDeadline.split(",")[1]);
+                timeOfDeadline = timeOfDeadline.replace("Tomorrow,", "At the next");
                 timeOfDeadline = timeOfDeadline + " 🔴";
             } else {
                 timeOfDeadline = timeOfDeadline.replace(",", " at");
