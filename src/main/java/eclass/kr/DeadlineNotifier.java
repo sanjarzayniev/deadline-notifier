@@ -165,7 +165,7 @@ public class DeadlineNotifier {
                     if (parts[1].contains("Tomorrow")) {
                         timeOfDeadline = parts[1] + " 🟡";
                     } else {
-                        timeOfDeadline = parts[1];
+                        timeOfDeadline = parts[1] + " 🟢";
                     }
                 }
             } else {
