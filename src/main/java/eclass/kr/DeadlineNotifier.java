@@ -142,11 +142,11 @@ public class DeadlineNotifier {
 
         timeOfDeadline = event.findElement(By.tagName("span")).getText();
 
-        // logic removed on October 5, 2025
-        // if (timeOfDeadline.contains("»")) {
-        // String[] deadlineParts = timeOfDeadline.split("»");
-        // timeOfDeadline = deadlineParts[1].trim(); // take the second part after »
-        // }
+        // logic removed on October 5, 2025 and readded on October 15, 2025
+        if (timeOfDeadline.contains("»") && !timeOfDeadline.startsWith("Today")) {
+            String[] deadlineParts = timeOfDeadline.split("»");
+            timeOfDeadline = deadlineParts[1].trim(); // take the second part after »
+        }
 
         if (timeOfDeadline.startsWith("Tomorrow")) {
             if (timeOfDeadline.split(",")[1].startsWith(" 00:")) {
